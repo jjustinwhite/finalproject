@@ -1,0 +1,72 @@
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      	<a class="brand" href="/">
+		  Book Store
+		</a>
+		<ul class="nav">
+			<% if administrator_signed_in? then %>
+			<li class="dropdown">
+				<a href="#"
+				   class="dropdown-toggle"
+				   data-toggle="dropdown">
+				   Admin Controls
+				   <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+						  <li><a href="/lists">Wish Lists</a></li>
+						  <li><a href="/users">Users</a></li>
+						  <li><a href="/items">Items</a></li>
+					</ul>
+					<% end %>
+					</li>
+					<li><%= link_to 'Books', books_path %></li>
+					<% if session[:list_id].nil? then %>
+				    <li><%= link_to 'New Wish List', new_list_path %></li>
+				  <% else %>
+				    <li><%= link_to 'My Wish List', list_path(session[:list_id]) %></li>
+				  <% end %>
+					</ul>
+		
+		  <ul class="nav pull-right">
+				<% if not session[:user_id].nil? then %>
+						<li class="divider-vertical"></li>
+					<li><a><%= display_email(session[:user_id]) %></a></li>
+						<li class="divider-vertical"></li>
+					<li><a href="/session/sign_out">Sign Out</a></li>
+						<li class="divider-vertical"></li>
+				<% else %>
+					<li class="divider-vertical"></li>
+					<li><a href="/session/sign_in">Sign In</a></li>
+					<li class="divider-vertical"></li>
+				<% end %>		
+		  </ul>
+		
+    </div>
+  </div>
+</div>
+<h1>Listing items</h1>
+
+<table class="table table-striped">
+  <tr>
+    <th>Book</th>
+    <th>List</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @items.each do |item| %>
+  <tr>
+    <td><%= item.book.name %></td>
+    <td><%= item.list.name %></td>
+    <td><button class="btn"><%= link_to 'Show', item %></button></td>
+    <td><button class="btn"><%= link_to 'Edit', edit_item_path(item) %></button></td>
+    <td><button class="btn"><%= link_to 'Destroy', item, confirm: 'Are you sure?', method: :delete %></button></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Item', new_item_path %>

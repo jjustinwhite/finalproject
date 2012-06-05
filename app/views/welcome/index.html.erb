@@ -1,0 +1,107 @@
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      	<a class="brand" href="/">
+		  Book Store
+		</a>
+		<ul class="nav">
+			<% if administrator_signed_in? then %>
+			<li class="dropdown">
+				<a href="#"
+				   class="dropdown-toggle"
+				   data-toggle="dropdown">
+				   Admin Controls
+				   <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+						  <li><a href="/lists">Wish Lists</a></li>
+						  <li><a href="/users">Users</a></li>
+						  <li><a href="/items">Items</a></li>
+					</ul>
+					<% end %>
+					</li>
+					<li><%= link_to 'Books', books_path %></li>
+					<% if session[:list_id].nil? then %>
+				    <li><%= link_to 'New Wish List', new_list_path %></li>
+				  <% else %>
+				    <li><%= link_to 'My Wish List', list_path(session[:list_id]) %></li>
+				  <% end %>
+					</ul>
+		
+		  <ul class="nav pull-right">
+				<% if not session[:user_id].nil? then %>
+						<li class="divider-vertical"></li>
+					<li><a><%= display_email(session[:user_id]) %></a></li>
+						<li class="divider-vertical"></li>
+					<li><a href="/session/sign_out">Sign Out</a></li>
+						<li class="divider-vertical"></li>
+				<% else %>
+					<li class="divider-vertical"></li>
+					<li><a href="/session/sign_in">Sign In</a></li>
+					<li class="divider-vertical"></li>
+				<% end %>		
+		  </ul>
+		
+    </div>
+  </div>
+</div>
+
+  <div class="hero-unit">
+    <div class="row">
+	  <div class ="span12 offset2">
+		  <h1>The Book Store</h1>
+		  <p>This website was built by Justin White for IT 232. <br />
+			This is the final project for the class. <br />
+			Design for the website makes use of Twitter Bootstrap.</p>
+			<a href="http://twitter.github.com/bootstrap/index.html" class="btn btn-primary btn-large">
+			      What is Bootstrap?
+			    </a>
+	  </div>
+    </div>
+  </div>
+
+<% if administrator_signed_in? then %>
+<div class ="container-fluid">
+<div class="row-fluid">
+<div class="span2 well">
+  <h3>Admin</h3>
+  <ul>
+	<li><%= link_to 'Books', books_url %></li>
+	<li><%= link_to 'Wish Lists', lists_url %></li>
+	<li><%= link_to 'Items', items_url %></li>
+	<li><%= link_to 'Users', users_url %></li>
+  </ul>
+  </div>
+<% end %>
+
+<% if not session[:user_id].nil? then %>
+	<p>
+	<% if session[:list_id].nil? then %>
+  		<div class = "span4 offset2 well"><%= link_to 'Start New Wish List', new_list_path %></div>
+	<% else %>
+  		<div class = "span4 offset2 well"><%= link_to 'Continue Previous Wish List', list_path(session[:list_id]) %></div>
+	<% end %>
+	</p>
+	</div>
+	</div>
+<% else %>
+ 	<div class = "row-fluid">
+	<div class = "span6 well">
+	<label><h3>Sign-in Form</h3></label>
+	<%= form_tag :action => 'sign_in' do %>
+	
+	<p>Your email: <%= text_field_tag :entered_email %></p>
+	
+	<p>Password: <%= password_field_tag :entered_password %></p>
+	
+	<%= submit_tag 'Sign in' %>
+	
+	<% end %>
+	
+	<p><%= link_to "Create a new account", new_user_path %></p>
+	
+	<p id="alert"><%= alert %></p>
+	</div>
+<% end %>
+	
+	</div>
